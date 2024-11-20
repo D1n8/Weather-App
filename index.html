@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Weather</title>
+    <script defer src="main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            startApp()
+        })
+    </script>
+</head>
+
+<body>
+    <main>
+        <h1 class="main__title">Погода</h1>
+        <div class="result-container"></div>
+        <form id="form">
+            <div class="input-container">
+                <h2 class="form__title">Широта</h2>
+                <input class="form__input" type="number" step="any" name="latitude" id="latitude">
+            </div>
+            <div class="input-container">
+                <h2 class="form__title">Долгота</h2>
+                <input class="form__input" type="number" step="any" name="longitude" id="longitude">
+            </div>
+            <div class="error-container"></div>
+            <button class="btn">Показать погоду</button>
+        </form>
+    </main>
+</body>
+
+</html>
