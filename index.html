@@ -15,23 +15,15 @@
 </head>
 
 <body>
-    <main class="main">
-        <h1 class="main__title">Прогноз погоды</h1>
-        <form id="form">
-            <div class="input-container">
-                <h2 class="form__title">Широта</h2>
-                <input class="form__input" type="number" step="any" name="latitude" id="latitude">
-            </div>
-            <div class="input-container">
-                <h2 class="form__title">Долгота</h2>
-                <input class="form__input" type="number" step="any" name="longitude" id="longitude">
-            </div>
-            <div class="error-container"></div>
-            <button class="btn">Показать погоду</button>
-        </form>
-        <div id="result-container">
-            <ul class="result__list" id="result-list"></ul>
+    <header>
+        <div class="title-container">
+            <h1 class="main__title">Прогноз погоды</h1>
         </div>
+        <button class="btn" id="add-widget">Добавить виджет</button>
+    </header>
+    
+    <main class="main">
+        <div class="widget-container" id="widget-container"></div>
     </main>
 </body>
 
