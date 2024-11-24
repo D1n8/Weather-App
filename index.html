@@ -5,7 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <title>Weather</title>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script defer src="main.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
@@ -21,8 +23,18 @@
         </div>
         <button class="btn" id="add-widget">Добавить виджет</button>
     </header>
-    
+
     <main class="main">
+        <!-- <div id="map" style="height: 400px; width: 400px;"></div>
+        <script>
+            const map = L.map('map').setView([51.5, -0.09], 13);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 50
+            }).addTo(map);
+            L.marker([51.5, -0.09]).addTo(map)
+
+        </script> -->
         <div class="widget-container" id="widget-container"></div>
     </main>
 </body>

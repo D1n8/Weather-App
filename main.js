@@ -15,22 +15,23 @@
         const widget = document.createElement('div')
         const resultContainer = document.createElement('div')
         const resultList = document.createElement('ul')
-        const deleteBtn = document.createElement('button')
+        const deleteBtn = document.createElement('img')
 
         widget.classList.add('widget')
         resultContainer.setAttribute('id', `result-container_${widgetId}`)
         resultList.classList.add('result__list')
         resultList.setAttribute('id', `result-list_${widgetId}`)
-        deleteBtn.classList.add('btn', 'delete-btn')
+        deleteBtn.classList.add('delete-btn')
         deleteBtn.setAttribute('id', `delete_${widgetId}`)
-        deleteBtn.textContent = 'Удалить виджет'
+        deleteBtn.setAttribute('src', 'img/close.png')
         deleteBtn.addEventListener('click', function (e) {
             e.preventDefault()
             widget.remove()
         })
 
+
         resultContainer.append(resultList)
-        widget.append(createForm(widgetId), resultContainer, deleteBtn)
+        widget.append(deleteBtn, createForm(widgetId), resultContainer)
 
         return widget
     }
@@ -68,6 +69,29 @@
         return inputContainer
     }
 
+    function addMap(container, lat, lon) {
+        const existingMap = container.querySelector('.map');
+        if (existingMap) {
+            existingMap.remove();
+        }
+
+        const mapContainer = document.createElement('div');
+        mapContainer.classList.add('map');
+        mapContainer.style.height = '300px';
+        container.append(mapContainer);
+
+        const map = L.map(mapContainer).setView([lat, lon], 15);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19
+        }).addTo(map);
+
+        L.marker([lat, lon]).addTo(map)
+            .bindPopup(`Координаты: ${lat}, ${lon}`)
+            .openPopup();
+    }
+
+
     function formSubmit(form, widgetId, key, latitude, longitude) {
         form.addEventListener('submit', function (e) {
             e.preventDefault()
@@ -78,36 +102,44 @@
                 const resultList = document.getElementById(`result-list_${widgetId}`)
                 errorContainer.innerHTML = ''
                 const query = `https://api.weatherapi.com/v1/current.json?key=${key}&q=${latitude.value},${longitude.value}`
+
                 fetch(query)
                     .then((response) => {
                         if (!response.ok) {
                             throw new Error('Неверный запрос')
                         }
-                        latitude.value = ''
-                        longitude.value = ''
+
                         return response.json()
                     })
                     .then((data) => {
                         resultContainer.classList.add('result-container')
                         resultList.innerHTML = ''
-                        createResultElement(resultList, 'li', ['result__item', 'location-country'], `Страна: ${data.location.country}`)
-                        createResultElement(resultList, 'li', ['result__item', 'location-region'], `Область/Регион: ${data.location.region}`)
-                        createResultElement(resultList, 'li', ['result__item', 'location-name'], `Город: ${data.location.name}`)
-                        createResultElement(resultList, 'li', ['result__item', 'time'], `Дата и время: ${data.location.localtime}`)
-                        createResultElement(resultList, 'li', ['result__item', 'temp'], `Температура в цельсиях: ${data.current.temp_c}`)
-                        createResultElement(resultList, 'li', ['result__item', 'wind'], `Скорость ветра: ${data.current.wind_kph}`)
+                        createResultElement(resultList, 'li', ['result__item', 'time'], `${data.location.localtime}`)
+
+                        let locContainer = createResultElement(resultList, 'li', ['result__item', 'location-container'])
+                        createResultElement(locContainer, 'p', ['result__item', 'location-country'], `${data.location.country}`)
+                        createResultElement(locContainer, 'p', ['result__item', 'location-name'], `${data.location.name}`)
+
+                        createResultElement(resultList, 'li', ['result__item', 'temp'], `${data.current.temp_c}°C`)
+                        createResultElement(resultList, 'li', ['result__item', 'wind'], `Ветер: ${data.current.wind_kph} км/ч`)
+
+                        addMap(resultList, latitude.value, longitude.value)
+                        latitude.value = ''
+                        longitude.value = ''
                     })
                     .catch((errorMessage) => { addError(errorContainer, errorMessage) }
                     )
+
             }
         })
     }
 
-    function createResultElement(container, elemTag, arrElemClassName, elemContent) {
+    function createResultElement(container, elemTag, arrElemClassName, elemContent = '') {
         const elem = document.createElement(elemTag)
         elem.textContent = elemContent
         arrElemClassName.map(classname => elem.classList.add(classname))
         container.append(elem)
+        return elem
     }
 
     function addError(container, message) {
