@@ -29,7 +29,6 @@
             widget.remove()
         })
 
-
         resultContainer.append(resultList)
         widget.append(deleteBtn, createForm(widgetId), resultContainer)
 
@@ -77,7 +76,6 @@
 
         const mapContainer = document.createElement('div');
         mapContainer.classList.add('map');
-        mapContainer.style.height = '300px';
         container.append(mapContainer);
 
         const map = L.map(mapContainer).setView([lat, lon], 15);
@@ -90,7 +88,6 @@
             .bindPopup(`Координаты: ${lat}, ${lon}`)
             .openPopup();
     }
-
 
     function formSubmit(form, widgetId, key, latitude, longitude) {
         form.addEventListener('submit', function (e) {
@@ -163,7 +160,6 @@
 
         return errorContainer.childElementCount === 0
     }
-
 
     window.startApp = startApp
 })()
